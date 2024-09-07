@@ -17,3 +17,20 @@ import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+
+public class PortFinder {
+
+    /**
+     * 找到一个可用的本地端口。
+     *
+     * @return 可用的端口号，如果找不到则返回 0。
+     */
+    @SneakyThrows
+    public static int findAvailablePort() {
+        try (ServerSocket serverSocket = new ServerSocket(0)) {
+            return serverSocket.getLocalPort();
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+}
