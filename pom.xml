@@ -21,7 +21,7 @@
     <artifactId>ok-commons</artifactId>
     <groupId>io.github.joy1024</groupId>
 
-    <url>github.com:okstar-org/ok-commons</url>
+    <url>github.com/okstar-org/ok-commons</url>
     <description>OkStar commons libraries</description>
 
     <properties>
