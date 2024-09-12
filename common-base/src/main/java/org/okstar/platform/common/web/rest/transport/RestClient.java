@@ -32,10 +32,8 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.glassfish.jersey.moxy.xml.MoxyXmlFeature;
-
 import org.okstar.platform.common.web.auth.AuthenticationMode;
 import org.okstar.platform.common.web.auth.AuthenticationToken;
-import org.okstar.platform.common.web.rest.exception.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -244,8 +242,8 @@ public final class RestClient {
                 || response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()
                 || response.getStatus() == Response.Status.FORBIDDEN.getStatusCode()
                 || response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode()) {
-            ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
-            throw new ClientErrorException(String.valueOf(errorResponse), response);
+            String errorResponse = response.readEntity(String.class);
+            throw new ClientErrorException(errorResponse, response);
         } else if (response.getStatus() == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
             throw new WebApplicationException("Server Error", response);
         } else {
@@ -555,6 +553,9 @@ public final class RestClient {
      */
     public void setToken(AuthenticationToken token) {
         this.token = token;
+        if (token.getAuthMode() == AuthenticationMode.SHARED_SECRET_KEY) {
+            headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token.getSharedSecretKey());
+        }
     }
 
     /**
