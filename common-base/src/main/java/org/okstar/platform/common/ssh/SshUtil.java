@@ -15,8 +15,10 @@ package org.okstar.platform.common.ssh;
 
 import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.util.Asserts;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -113,23 +115,32 @@ public class SshUtil {
 
     public static int writeFileOverSFTP(Session session, String remoteFilePath, String localFilePath) throws IOException, JSchException, SftpException {
         log.info("Write file:{} => {}", remoteFilePath, localFilePath);
+        int bytes = 0;
+
+        File file = new File(localFilePath);
+        if (!file.exists()) {
+            log.warn("file is no existing!");
+            return bytes;
+        }
 
         ChannelSftp channel;
-        int bytes = 0;
 
         try {
             channel = openSftpChannel(session);
-            channel.connect();
-            try (InputStream localInputStream = SshUtil.class.getResourceAsStream(localFilePath);
-                 OutputStream remoteOutputStream = channel.put(remoteFilePath)) {
-                if (localInputStream != null) {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = localInputStream.read(buffer)) != -1) {
-                        remoteOutputStream.write(buffer, 0, bytesRead);
-                        bytes += bytesRead;
-                    }
+            try (InputStream localInputStream = FileUtils.openInputStream(file);
+                OutputStream remoteOutputStream = channel.put(remoteFilePath)) {
+                channel.connect();
+                if (remoteOutputStream == null) {
+                    log.warn("Unable to open output stream");
+                    return bytes;
                 }
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = localInputStream.read(buffer)) != -1) {
+                    remoteOutputStream.write(buffer, 0, bytesRead);
+                    bytes += bytesRead;
+                }
+                log.info("write is successfully=>{}!", remoteFilePath);
             } finally {
                 //exit and close channel
                 channel.exit();
