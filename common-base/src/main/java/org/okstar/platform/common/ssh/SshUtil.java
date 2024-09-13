@@ -127,9 +127,9 @@ public class SshUtil {
 
         try {
             channel = openSftpChannel(session);
+            channel.connect();
             try (InputStream localInputStream = FileUtils.openInputStream(file);
-                OutputStream remoteOutputStream = channel.put(remoteFilePath)) {
-                channel.connect();
+                 OutputStream remoteOutputStream = channel.put(remoteFilePath)) {
                 if (remoteOutputStream == null) {
                     log.warn("Unable to open output stream");
                     return bytes;
