@@ -14,9 +14,9 @@
 package org.okstar.platform.common.web;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
@@ -27,9 +27,10 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
 import java.util.List;
 
-
+@Slf4j
 public class OkWebUtil {
     private static final Logger logger = LoggerFactory.getLogger(OkWebUtil.class);
 
@@ -59,26 +60,52 @@ public class OkWebUtil {
 
     @SneakyThrows
     public static String getPublicIp() {
-        return doGet("https://ifconfig.me/");
+        return get("https://ifconfig.me/");
     }
 
     /**
+     * 发送 Get请求
+     *
      * @param url
      * @return 成功时返回数据字符串
      */
-    public static String doGet(String url) {
+    public static String get(String url) {
+        return get(URI.create(url));
+    }
+
+
+    public static String get(URI url) {
+        try {
+            HttpResponse response = doGet(url);
+            if (response == null) {
+                return null;
+            }
+
+            if (response.getStatusLine().getStatusCode() / 100 != 2) {
+                return null;
+            }
+
+            return EntityUtils.toString(response.getEntity());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    public static HttpResponse doGet(String url) {
+        return doGet(URI.create(url));
+    }
+
+    public static HttpResponse doGet(URI url) {
         // 构造HttpClient的实例
         HttpClient client = buildHttpClient();
 
         // 创建GET方法的实例
-        HttpGet method = new HttpGet(url);
+        HttpGet method = new HttpGet(url.toString());
         try {
-            HttpResponse response = client.execute(method);
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK || response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
-                return EntityUtils.toString(response.getEntity());
-            }
+            return client.execute(method);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Get: {}", url, e);
         } finally {
             method.releaseConnection();
         }
