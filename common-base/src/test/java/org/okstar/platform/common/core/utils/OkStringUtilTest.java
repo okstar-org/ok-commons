@@ -15,6 +15,7 @@ package org.okstar.platform.common.core.utils;
 
 
 import org.junit.jupiter.api.Test;
+import org.okstar.platform.common.string.OkNameUtil;
 import org.okstar.platform.common.string.OkStringUtil;
 import org.testng.Assert;
 
@@ -22,16 +23,16 @@ class OkStringUtilTest {
 
     @Test
     void combineName() {
-        Assert.assertTrue("高".equals(OkStringUtil.combinePeopleName("zh", "高", null)));
-        Assert.assertTrue("高".equals(OkStringUtil.combinePeopleName("zh", "高", "")));
-        Assert.assertTrue("高".equals(OkStringUtil.combinePeopleName("zh", "", "高")));
-        Assert.assertTrue("高".equals(OkStringUtil.combinePeopleName("zh", null, "高")));
-        Assert.assertTrue("高杰".equals(OkStringUtil.combinePeopleName("zh", "高", "杰")));
+        Assert.assertTrue("高".equals(OkNameUtil.combinePeopleName("zh", "高", null)));
+        Assert.assertTrue("高".equals(OkNameUtil.combinePeopleName("zh", "高", "")));
+        Assert.assertTrue("高".equals(OkNameUtil.combinePeopleName("zh", "", "高")));
+        Assert.assertTrue("高".equals(OkNameUtil.combinePeopleName("zh", null, "高")));
+        Assert.assertTrue("高杰".equals(OkNameUtil.combinePeopleName("zh", "高", "杰")));
 
-        Assert.assertTrue("Bill".equals(OkStringUtil.combinePeopleName("en", "Bill", "")));
-        Assert.assertTrue("Bill".equals(OkStringUtil.combinePeopleName("en", "Bill", null)));
-        Assert.assertTrue("Gates".equals(OkStringUtil.combinePeopleName("en", "", "Gates")));
-        Assert.assertTrue("Bill Gates".equals(OkStringUtil.combinePeopleName("en", "Bill", "Gates")));
+        Assert.assertTrue("Bill".equals(OkNameUtil.combinePeopleName("en", "Bill", "")));
+        Assert.assertTrue("Bill".equals(OkNameUtil.combinePeopleName("en", "Bill", null)));
+        Assert.assertTrue("Gates".equals(OkNameUtil.combinePeopleName("en", "", "Gates")));
+        Assert.assertTrue("Bill Gates".equals(OkNameUtil.combinePeopleName("en", "Bill", "Gates")));
     }
 
 

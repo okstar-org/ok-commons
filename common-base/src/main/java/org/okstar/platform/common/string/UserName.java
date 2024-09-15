@@ -11,15 +11,18 @@
  * /
  */
 
-package org.okstar.platform.common.web;
+package org.okstar.platform.common.string;
 
-import org.junit.jupiter.api.Test;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-class OkWebUtilTest {
-
-    @Test
-    void doGet() {
-        String s = OkWebUtil.get("http://www.baidu.com");
-        System.out.println(s);
-    }
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserName {
+    private String firstName;
+    private String lastName;
 }
