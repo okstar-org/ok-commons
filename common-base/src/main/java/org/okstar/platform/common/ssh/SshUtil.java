@@ -15,13 +15,11 @@ package org.okstar.platform.common.ssh;
 
 import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.util.Asserts;
+import org.okstar.platform.common.asserts.OkAssert;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -113,45 +111,42 @@ public class SshUtil {
         }
     }
 
-    public static int writeFileOverSFTP(Session session, String remoteFilePath, String localFilePath) throws IOException, JSchException, SftpException {
+    public static boolean writeFileOverSFTP(Session session, String remoteFilePath, String localFilePath) throws IOException, JSchException, SftpException {
         log.info("Write file:{} => {}", remoteFilePath, localFilePath);
-        int bytes = 0;
 
         File file = new File(localFilePath);
         if (!file.exists()) {
             log.warn("file is no existing!");
-            return bytes;
+            return false;
         }
 
-        ChannelSftp channel;
+        if (file.length() <= 0) {
+            log.warn("file is empty!");
+            return false;
+        }
 
+        ChannelSftp channel = null;
         try {
             channel = openSftpChannel(session);
             channel.connect();
-            try (InputStream localInputStream = FileUtils.openInputStream(file);
-                 OutputStream remoteOutputStream = channel.put(remoteFilePath)) {
-                if (remoteOutputStream == null) {
+            try (InputStream inputStream = new FileInputStream(file);
+                 OutputStream outputStream = channel.put(remoteFilePath)) {
+                if (outputStream == null) {
                     log.warn("Unable to open output stream");
-                    return bytes;
+                    return false;
                 }
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = localInputStream.read(buffer)) != -1) {
-                    remoteOutputStream.write(buffer, 0, bytesRead);
-                    bytes += bytesRead;
-                }
-                log.info("write is successfully=>{}!", remoteFilePath);
-            } finally {
-                //exit and close channel
+                int copied = IOUtils.copy(inputStream, outputStream);
+                log.info("write is successfully=>{}!", copied);
+                OkAssert.isTrue(copied == file.length(), "Can not write file to remote!");
+            }
+        } finally {
+            //exit and close channel
+            if (channel != null) {
                 channel.exit();
                 closeChannel(channel);
             }
-        } finally {
-            //close session
-            closeSession(session);
         }
-
-        return bytes;
+        return true;
     }
 
 
