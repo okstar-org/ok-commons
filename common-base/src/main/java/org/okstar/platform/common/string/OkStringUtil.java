@@ -13,7 +13,7 @@
 
 package org.okstar.platform.common.string;
 
-import org.okstar.platform.common.core.constant.Constants;
+
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -54,7 +54,7 @@ public class OkStringUtil extends org.apache.commons.lang3.StringUtils {
      * @return 结果
      */
     public static boolean isHttp(String link) {
-        return OkStringUtil.startsWithAny(link, Constants.HTTP, Constants.HTTPS);
+        return OkStringUtil.startsWithAny(link, "http://", "https://");
     }
 
     /**

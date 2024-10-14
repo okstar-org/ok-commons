@@ -13,7 +13,6 @@
 
 package org.okstar.platform.common.regex;
 
-import org.okstar.platform.common.core.text.Convert;
 import org.okstar.platform.common.string.OkStringUtil;
 
 import java.util.Arrays;
@@ -32,71 +31,6 @@ public class OkRegexUtil
      */
     public final static Set<Character> RE_KEYS = new HashSet<>(
             Arrays.asList('$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|'));
-
-    /**
-     * 正则替换指定值<br>
-     * 通过正则查找到字符串，然后把匹配到的字符串加入到replacementTemplate中，$1表示分组1的字符串
-     *
-     * <p>
-     * 例如：原字符串是：中文1234，我想把1234换成(1234)，则可以：
-     *
-     * <pre>
-     * ReUtil.replaceAll("中文1234", "(\\d+)", "($1)"))
-     *
-     * 结果：中文(1234)
-     * </pre>
-     *
-     * @param content 文本
-     * @param regex 正则
-     * @param replacementTemplate 替换的文本模板，可以使用$1类似的变量提取正则匹配出的内容
-     * @return 处理后的文本
-     */
-    public static String replaceAll(CharSequence content, String regex, String replacementTemplate)
-    {
-        final Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
-        return replaceAll(content, pattern, replacementTemplate);
-    }
-
-    /**
-     * 正则替换指定值<br>
-     * 通过正则查找到字符串，然后把匹配到的字符串加入到replacementTemplate中，$1表示分组1的字符串
-     *
-     * @param content 文本
-     * @param pattern {@link Pattern}
-     * @param replacementTemplate 替换的文本模板，可以使用$1类似的变量提取正则匹配出的内容
-     * @return 处理后的文本
-     * @since 3.0.4
-     */
-    public static String replaceAll(CharSequence content, Pattern pattern, String replacementTemplate)
-    {
-        if (OkStringUtil.isEmpty(content))
-        {
-            return OkStringUtil.EMPTY;
-        }
-
-        final Matcher matcher = pattern.matcher(content);
-        boolean result = matcher.find();
-        if (result)
-        {
-            final Set<String> varNums = findAll(GROUP_VAR, replacementTemplate, 1, new HashSet<>());
-            final StringBuffer sb = new StringBuffer();
-            do
-            {
-                String replacement = replacementTemplate;
-                for (String var : varNums)
-                {
-                    int group = Integer.parseInt(var);
-                    replacement = replacement.replace("$" + var, matcher.group(group));
-                }
-                matcher.appendReplacement(sb, escape(replacement));
-                result = matcher.find();
-            }
-            while (result);
-            matcher.appendTail(sb);
-            return sb.toString();
-        }
-        return Convert.toStr(content);
-    }
  
     /**
      * 取得内容中匹配的所有结果

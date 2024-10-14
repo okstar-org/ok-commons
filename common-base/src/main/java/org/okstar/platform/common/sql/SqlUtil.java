@@ -13,7 +13,7 @@
 
 package org.okstar.platform.common.sql;
 
-import org.okstar.platform.common.core.exception.OkRuntimeException;
+import org.okstar.platform.common.exception.OkRuntimeException;
 import org.okstar.platform.common.string.OkStringUtil;
 
 /**
