@@ -24,7 +24,6 @@ import java.util.Map;
 
 /**
  * 响应信息主体
- * 
  */
 @Data
 @NoArgsConstructor
@@ -49,20 +48,17 @@ public class Res<T> extends DTO {
      * @param <T>
      * @return
      */
-    public static <T> Res<T> ok(Req req) {
-        return build(req, null, OK, null);
+    public static <T> Res<T> ok() {
+        return build(null, OK, null);
     }
 
     public static <T> Res<T> ok(T data) {
-        return build(Req.empty(), data, OK, null);
+        return build(data, OK, null);
     }
 
-    public static <T> Res<T> ok(Req req, T data) {
-        return build(req, data, OK, null);
-    }
 
-    public static <T> Res<T> ok(Req req, T data, String msg) {
-        return build(req, data, OK, msg);
+    public static <T> Res<T> ok(T data, String msg) {
+        return build(data, OK, msg);
     }
 
 
@@ -73,40 +69,26 @@ public class Res<T> extends DTO {
      * @return
      */
     public static <T> Res<T> created() {
-        return build(null, null, CREATED, null);
+        return build(null, CREATED, null);
     }
 
     public static <T> Res<T> created(T data) {
-        return build(null, data, CREATED, null);
+        return build(data, CREATED, null);
     }
 
     public static <T> Res<T> created(T data, String msg) {
-        return build(null, null, CREATED, msg);
+        return build(null, CREATED, msg);
     }
 
     public static <T> Res<T> error() {
-        return build(Req.empty(), null, ERROR, null);
+        return build(null, ERROR, null);
     }
 
-    /**
-     * 内部服务器错误，使用500返回码
-     *
-     * @param <T>
-     * @return
-     */
-    public static <T> Res<T> error(Req req) {
-        return build(req, null, ERROR, null);
+    public static <T> Res<T> error(String msg) {
+        return build(null, ERROR, msg);
     }
 
-    public static <T> Res<T> error(Req req, String msg) {
-        return build(req, null, ERROR, msg);
-    }
-
-    public static <T> Res<T> error(Req req, T data, String msg) {
-        return build(req, data, ERROR, msg);
-    }
-
-    private static <T> Res<T> build(Req req, T data, int code, String msg) {
+    public static <T> Res<T> build(T data, int code, String msg) {
         Res<T> res = new Res<>();
         res.setCode(code);
         res.setData(data);

@@ -211,43 +211,7 @@ public class OkStringUtil extends org.apache.commons.lang3.StringUtils {
     }
 
 
-    /**
-     * <pre>
-     * 组合人的名称
-     * CJK(中日韩)=> firstName+lastName
-     * Other => firstName+' '+lastName
-     * </pre>
-     *
-     * @param language
-     * @param firstName
-     * @param lastName
-     * @return
-     */
-    public static String combinePeopleName(String language, String firstName, String lastName) {
-        if (OkStringUtil.isEmpty(firstName) && OkStringUtil.isEmpty(lastName))
-            return "";
 
-        if (OkStringUtil.isEmpty(firstName)) {
-            return lastName;
-        }
-
-        if (OkStringUtil.isEmpty(lastName))
-            return firstName;
-
-        String fmt;
-        if ( OkStringUtil.isEmpty(language)
-                || language.startsWith("zh")
-                || language.startsWith("ko")
-                || language.startsWith("ja"))
-        {
-            //中日韩名字无需空格
-            fmt = "%s%s";
-        } else {
-            //其他都加空格
-            fmt = "%s %s";
-        }
-        return String.format(fmt, firstName, lastName);
-    }
 
 
 }
