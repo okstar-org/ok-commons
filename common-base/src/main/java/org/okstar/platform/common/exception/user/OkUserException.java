@@ -11,28 +11,33 @@
  * /
  */
 
-package org.okstar.platform.common.thread;
+package org.okstar.platform.common.exception.user;
 
 import org.okstar.platform.common.exception.OkRuntimeException;
 
-import java.util.concurrent.TimeUnit;
+/**
+ * 用户信息异常类
+ * 
+ *
+ */
+public class OkUserException extends OkRuntimeException
+{
+    public OkUserException() {
+    }
 
-public class OkThreadUtils {
+    public OkUserException(String message) {
+        super(message);
+    }
 
-    /**
-     * 线程等待
-     * @param sec 秒
-     * @param quiet 是否静默，
-     *   静默被打断直接返回，非静默抛出异常
-     */
-    public static void sleepSeconds(int sec, boolean quiet) {
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            if (quiet) {
-                return;
-            }
-            throw new OkRuntimeException(e);
-        }
+    public OkUserException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public OkUserException(Throwable cause) {
+        super(cause);
+    }
+
+    public OkUserException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

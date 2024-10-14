@@ -11,28 +11,22 @@
  * /
  */
 
-package org.okstar.platform.common.thread;
+package org.okstar.platform.common.exception.file;
 
 import org.okstar.platform.common.exception.OkRuntimeException;
 
-import java.util.concurrent.TimeUnit;
+/**
+ * 文件信息异常类
+ * 
+ *
+ */
+public class FileException extends OkRuntimeException
+{
+    private static final long serialVersionUID = 1L;
 
-public class OkThreadUtils {
-
-    /**
-     * 线程等待
-     * @param sec 秒
-     * @param quiet 是否静默，
-     *   静默被打断直接返回，非静默抛出异常
-     */
-    public static void sleepSeconds(int sec, boolean quiet) {
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            if (quiet) {
-                return;
-            }
-            throw new OkRuntimeException(e);
-        }
+    public FileException(String code, Object[] args)
+    {
+        super("file", null);
     }
+
 }
