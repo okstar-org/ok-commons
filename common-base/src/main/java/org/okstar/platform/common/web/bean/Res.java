@@ -100,7 +100,7 @@ public class Res<T> extends DTO {
         extra.put(k, o);
     }
 
-    public boolean success() {
+    public boolean getSuccess() {
         return code == OK || code == CREATED;
     }
 
