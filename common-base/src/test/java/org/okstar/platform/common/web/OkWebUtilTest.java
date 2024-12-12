@@ -19,7 +19,13 @@ class OkWebUtilTest {
 
     @Test
     void doGet() {
-        String s = OkWebUtil.get("http://www.baidu.com");
+        String s = OkWebUtil.get("http://chuanshaninfo.com");
         System.out.println(s);
+    }
+
+    @Test
+    void hasOkContent() {
+        boolean ok = OkWebUtil.hasOkContent("https://chuanshaninfo.com");
+        System.out.println(ok);
     }
 }

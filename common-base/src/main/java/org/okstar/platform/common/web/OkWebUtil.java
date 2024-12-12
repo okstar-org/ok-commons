@@ -20,47 +20,73 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.okstar.platform.common.date.OkDateUtils;
+import org.okstar.platform.common.string.OkStringUtil;
 
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class OkWebUtil {
-    private static final Logger logger = LoggerFactory.getLogger(OkWebUtil.class);
 
-    private static HttpClient buildHttpClient() {
+    private static HttpClient buildHttpClient(URI url) {
+        try {
+            //  创建请求配置信息
+            RequestConfig requestConfig = RequestConfig.custom()
+                    // 设置连接超时时间
+                    .setConnectTimeout(60 * 1000)
+                    // 设置响应超时时间
+                    .setSocketTimeout(60 * 1000)
+                    // 设置从连接池获取链接的超时时间
+                    .setConnectionRequestTimeout(3000)
+                    .build();
 
-        //  创建请求配置信息
-        RequestConfig requestConfig = RequestConfig.custom()
-                // 设置连接超时时间
-                .setConnectTimeout(3000)
-                // 设置响应超时时间
-                .setSocketTimeout(3000)
-                // 设置从连接池获取链接的超时时间
-                .setConnectionRequestTimeout(3000)
-                .build();
+            List<Header> headers = new ArrayList<>();
 
-        List<Header> headers = new java.util.ArrayList<>();
-        headers.add(new BasicHeader("user-agent", "curl/7.81.0"));
+            // return HttpClients.createDefault();
 
-        CloseableHttpClient client = HttpClients.custom()
-                .setDefaultHeaders(headers)   // 设置默认请求头
-                .setDefaultRequestConfig(requestConfig) // 设置默认配置
-                .build();
+            var builder = HttpClients.custom().setDefaultHeaders(headers).setDefaultRequestConfig(requestConfig);
 
-        return client;
+            // 信任所有
+            SSLContext sslContext = new SSLContextBuilder()
+                    .loadTrustMaterial(null, (chain, authType) -> true)
+                    .build();
+
+            return builder.setSSLContext(sslContext).setSSLHostnameVerifier((hostname, sslSession) -> {
+                log.info("Verify host:{}", hostname);
+                return true;
+            }).build();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @SneakyThrows
     public static String getPublicIp() {
         return get("https://ifconfig.me/");
+    }
+
+    /**
+     * 返回正确返回码+存在内容
+     * @param url
+     * @return
+     */
+    public static boolean hasOkContent(String url) {
+        try {
+            String content = get(url + "?t=" + OkDateUtils.now().getTime());
+            return OkStringUtil.isNotEmpty(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -76,40 +102,29 @@ public class OkWebUtil {
 
     public static String get(URI url) {
         try {
-            HttpResponse response = doGet(url);
-            if (response == null) {
+            var response = doGet(url);
+            int code = response.getStatusLine().getStatusCode() / 100;
+            if (!(code == 2 || code == 3)) {
                 return null;
             }
-
-            if (response.getStatusLine().getStatusCode() / 100 != 2) {
-                return null;
-            }
-
             return EntityUtils.toString(response.getEntity());
-        } catch (Exception e) {
-            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
-    public static HttpResponse doGet(String url) {
+    public static HttpResponse doGet(String url) throws IOException {
         return doGet(URI.create(url));
     }
 
-    public static HttpResponse doGet(URI url) {
+    public static HttpResponse doGet(URI url) throws IOException {
+        log.info("doGet url:{}", url);
         // 构造HttpClient的实例
-        HttpClient client = buildHttpClient();
-
+        HttpClient client = buildHttpClient(url);
         // 创建GET方法的实例
         HttpGet method = new HttpGet(url.toString());
-        try {
-            return client.execute(method);
-        } catch (Exception e) {
-            log.error("Get: {}", url, e);
-        } finally {
-            method.releaseConnection();
-        }
-        return null;
+        return client.execute(method);
     }
 
 
