@@ -16,7 +16,7 @@ package org.okstar.platform.common.ssh;
 import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.util.Asserts;
+
 import org.okstar.platform.common.asserts.OkAssert;
 
 import java.io.*;
@@ -83,7 +83,7 @@ public class SshUtil {
      * 打开 SFTP 通道
      */
     public static ChannelSftp openSftpChannel(Session session) throws JSchException {
-        Asserts.notNull(session, "session is null!");
+        OkAssert.notNull(session, "session is null!");
 
         if (!session.isConnected()) {
             session.connect();
@@ -95,7 +95,7 @@ public class SshUtil {
 
 
     public static ChannelExec openExecChannel(Session session) throws JSchException {
-        Asserts.notNull(session, "session is null!");
+        OkAssert.notNull(session, "session is null!");
 
         if (!session.isConnected()) {
             session.connect();
