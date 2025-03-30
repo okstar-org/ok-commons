@@ -18,9 +18,9 @@
 
     <packaging>pom</packaging>
 
-    <version>25.06.00-SNAPSHOT</version>
-    <artifactId>ok-commons</artifactId>
     <groupId>io.github.joy1024</groupId>
+    <artifactId>ok-commons</artifactId>
+    <version>25.06.00-SNAPSHOT</version>
 
     <url>github.com/okstar-org/ok-commons</url>
     <description>OkStar commons libraries</description>

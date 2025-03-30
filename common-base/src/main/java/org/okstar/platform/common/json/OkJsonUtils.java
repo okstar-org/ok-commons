@@ -13,7 +13,9 @@
 
 package org.okstar.platform.common.json;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.fge.jackson.JacksonUtils;
 import lombok.SneakyThrows;
 
@@ -45,6 +47,8 @@ public class OkJsonUtils {
     @SneakyThrows
     public static <T> T asObject(String json, Class<T> clazz) {
         ObjectMapper mapper = JacksonUtils.newMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
         return mapper.readValue(json, clazz);
     }
 }
