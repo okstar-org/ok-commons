@@ -41,7 +41,8 @@ public class OkHttpUtils {
 
     /**
      * 执行 GET 请求
-     * @param url 请求的 URL
+     *
+     * @param url     请求的 URL
      * @param headers 可选的请求头 (key-value 对)
      * @return 响应体字符串
      * @throws Exception 如果请求失败
@@ -63,13 +64,14 @@ public class OkHttpUtils {
 
     /**
      * 执行 POST 请求
-     * @param url 请求的 URL
-     * @param body 请求体（例如 JSON 字符串）
+     *
+     * @param url     请求的 URL
+     * @param body    请求体（例如 JSON 字符串）
      * @param headers 可选的请求头
      * @return 响应体字符串
      * @throws Exception 如果请求失败
      */
-    public String post(String url, String body, Map<String, String> headers) throws Exception {
+    public String postJSON(String url, String body, Map<String, String> headers) throws Exception {
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .POST(HttpRequest.BodyPublishers.ofString(body != null ? body : ""));
@@ -77,9 +79,9 @@ public class OkHttpUtils {
         // 添加请求头
         if (headers != null) {
             headers.forEach(requestBuilder::header);
-        } else {
-            requestBuilder.header("Content-Type", "application/json"); // 默认 JSON
         }
+        requestBuilder.header("Content-Type", "application/json"); // 默认 JSON
+
 
         HttpResponse<String> response = client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
         checkStatus(response);
@@ -88,8 +90,9 @@ public class OkHttpUtils {
 
     /**
      * 执行 PUT 请求
-     * @param url 请求的 URL
-     * @param body 请求体（例如 JSON 字符串）
+     *
+     * @param url     请求的 URL
+     * @param body    请求体（例如 JSON 字符串）
      * @param headers 可选的请求头
      * @return 响应体字符串
      * @throws Exception 如果请求失败
@@ -113,7 +116,8 @@ public class OkHttpUtils {
 
     /**
      * 执行 DELETE 请求
-     * @param url 请求的 URL
+     *
+     * @param url     请求的 URL
      * @param headers 可选的请求头
      * @return 响应体字符串
      * @throws Exception 如果请求失败

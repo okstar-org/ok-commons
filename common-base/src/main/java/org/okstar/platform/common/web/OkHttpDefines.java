@@ -29,4 +29,9 @@ public interface OkHttpDefines {
      */
     String Header_X_OK_from="X-OK-From";
 
+    /**
+     * 租户URL
+     */
+    String HEADER_X_TENANT_URL="X-OK-Tenant-Url";
+
 }
