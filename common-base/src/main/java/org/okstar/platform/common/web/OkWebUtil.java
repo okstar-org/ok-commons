@@ -71,7 +71,7 @@ public class OkWebUtil {
 
     @SneakyThrows
     public static String getPublicIp() {
-        return get("https://ifconfig.me/");
+        return get("https://ifconfig.me/ip");
     }
 
     /**
