@@ -32,7 +32,7 @@ public class OkPageable extends VO {
     }
 
     public int getPageIndex() {
-        return pageIndex >= 0 ? pageIndex : 0;
+        return Math.max(pageIndex, 0);
     }
 
     public int getPageSize() {
