@@ -261,12 +261,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.hyperic</groupId>
             <artifactId>sigar</artifactId>
         </dependency>
@@ -287,6 +281,7 @@
             <artifactId>javase</artifactId>
             <version>3.3.2</version>
         </dependency>
+
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>

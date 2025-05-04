@@ -13,7 +13,6 @@
 
 package org.okstar.platform.common.web;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -69,7 +68,6 @@ public class OkWebUtil {
     }
 
 
-    @SneakyThrows
     public static String getPublicIp() {
         return get("https://ifconfig.me/ip");
     }
