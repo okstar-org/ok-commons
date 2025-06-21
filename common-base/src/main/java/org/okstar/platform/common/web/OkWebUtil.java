@@ -34,7 +34,7 @@ import java.util.List;
 @Slf4j
 public class OkWebUtil {
 
-    private static HttpClient buildHttpClient(URI url) {
+    private static HttpClient buildHttpClient() {
         try {
             //  创建请求配置信息
             RequestConfig requestConfig = RequestConfig.custom()
@@ -119,7 +119,7 @@ public class OkWebUtil {
     public static HttpResponse doGet(URI url) throws IOException {
         log.info("doGet url:{}", url);
         // 构造HttpClient的实例
-        HttpClient client = buildHttpClient(url);
+        HttpClient client = buildHttpClient();
         // 创建GET方法的实例
         HttpGet method = new HttpGet(url.toString());
         return client.execute(method);

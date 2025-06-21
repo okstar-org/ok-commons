@@ -32,8 +32,5 @@ public class HostInfo {
     private String fqdn;
     //本机主机名
     private String hostName;
-    //公网ip
-    private String publicIp;
-
     private Long pid;
 }
