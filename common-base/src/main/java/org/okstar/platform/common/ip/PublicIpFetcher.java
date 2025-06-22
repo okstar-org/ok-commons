@@ -84,6 +84,7 @@ public class PublicIpFetcher {
                     log.warn("空内容!");
                     continue;
                 }
+                log.debug("Geo: {}", r.get());
                 return r;
             } catch (IOException | InterruptedException e) {
                 log.warn("查询失败:{}", e.getMessage());
@@ -102,6 +103,7 @@ public class PublicIpFetcher {
                     log.warn("空内容!");
                     continue;
                 }
+                log.debug("GeoIp: {}", r.get());
                 return r;
             } catch (IOException | InterruptedException e) {
                 log.warn("查询失败:{}", e.getMessage());
