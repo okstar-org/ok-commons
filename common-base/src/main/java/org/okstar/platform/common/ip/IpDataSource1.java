@@ -63,7 +63,7 @@ public class IpDataSource1 implements IpDataSource {
         Optional<String> optional = doGet(client, timeout);
         return optional.map(res -> {
             var map = OkJsonUtils.asObject(res, HashMap.class);
-            return (String.valueOf(map.getOrDefault("query", "")));
+            return map == null ? "" : String.valueOf(map.getOrDefault("query", "")).trim();
         });
     }
 
@@ -73,7 +73,7 @@ public class IpDataSource1 implements IpDataSource {
         return optional.map(res -> {
             IpGeo geo = OkJsonUtils.asObject(res, IpGeo.class);
             var map = OkJsonUtils.asObject(res, HashMap.class);
-            geo.setIp(String.valueOf(map.getOrDefault("query", "")));
+            geo.setIp(String.valueOf(map.getOrDefault("query", "")).trim());
             return geo;
         });
     }

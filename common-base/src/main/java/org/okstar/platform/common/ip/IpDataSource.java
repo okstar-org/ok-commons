@@ -13,6 +13,8 @@
 
 package org.okstar.platform.common.ip;
 
+import org.okstar.platform.common.string.OkStringUtil;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -45,7 +47,7 @@ public interface IpDataSource {
         HttpResponse<String> response = sharedClient.send(request, HttpResponse.BodyHandlers.ofString());
         // 检查响应状态码
         if (response.statusCode() == 200) {
-            return Optional.of(response.body());
+            return Optional.of(OkStringUtil.trim(response.body()));
         } else {
             return Optional.empty();
         }
