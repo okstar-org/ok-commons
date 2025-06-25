@@ -19,7 +19,14 @@ import org.okstar.platform.common.string.OkNameUtil;
 import org.okstar.platform.common.string.OkStringUtil;
 import org.testng.Assert;
 
+import java.util.Locale;
+
 class OkStringUtilTest {
+    @Test
+    void getLang(){
+        var c = Locale.CHINA;
+        System.out.println(c.toLanguageTag());
+    }
 
     @Test
     void combineName() {
