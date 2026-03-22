@@ -11,7 +11,7 @@
  * /
  */
 
-package org.okstar.platform.common.exception.user;
+package org.okstar.platform.common.exception;
 
 /**
  * 验证码失效异常类

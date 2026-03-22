@@ -20,7 +20,7 @@
 
     <groupId>io.github.joy1024</groupId>
     <artifactId>ok-commons</artifactId>
-    <version>25.06.00-SNAPSHOT</version>
+    <version>25.06.01-SNAPSHOT</version>
 
     <url>github.com/okstar-org/ok-commons</url>
     <description>OkStar commons libraries</description>
@@ -30,9 +30,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <modules>
-        <module>common-base</module>
-    </modules>
 
     <build>
 
@@ -197,4 +194,6 @@
             </releases>
         </repository>
     </repositories>
+
+
 </project>

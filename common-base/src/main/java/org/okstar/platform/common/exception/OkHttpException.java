@@ -14,7 +14,6 @@
 package org.okstar.platform.common.exception;
 
 import lombok.Getter;
-import org.okstar.platform.common.exception.user.OkUserException;
 
 @Getter
 public class OkHttpException extends OkUserException {

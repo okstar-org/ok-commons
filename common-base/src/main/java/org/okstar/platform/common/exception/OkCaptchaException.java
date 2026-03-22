@@ -18,11 +18,11 @@ package org.okstar.platform.common.exception;
  * 
  *
  */
-public class CaptchaException extends RuntimeException
+public class OkCaptchaException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
-    public CaptchaException(String msg)
+    public OkCaptchaException(String msg)
     {
         super(msg);
     }

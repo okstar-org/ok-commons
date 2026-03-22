@@ -20,151 +20,163 @@ import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
  * 时间工具类
- * 
+ *
  *
  */
-public class OkDateUtils extends DateUtils
-{
-    public static String YYYY = "yyyy";
+public class OkDateUtils extends DateUtils {
 
-    public static String YYYY_MM = "yyyy-MM";
-
-    public static String YYYY_MM_DD = "yyyy-MM-dd";
-
-    public static String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
-
+    public final static String YYYYMMDD = "yyyy/MM/dd";
+    public final static String YYYY_MM_DD = "yyyy-MM-dd";
     public final static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-    
-    private static final String[] parsePatterns = {
-            "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM", 
-            "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
-            "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM"};
+    public final static String YYYYsMMsDD = "yyyy/MM/dd";
+    public final static String YYYYsMMsDD_HH_MM_SS = "yyyy/MM/dd HH:mm:ss";
+    public final static String YYYYdMMdDD = "yyyy.MM.dd";
+    public final static String YYYYdMMdDD_HH_MM_SS = "yyyy.MM.dd HH:mm:ss";
+
+    public enum Format {
+        YYYYMMDD,
+        YYYY_MM_DD,
+        YYYY_MM_DD_HH_MM_SS,
+        YYYYsMMsDD,
+        YYYYsMMsDD_HH_MM_SS,
+        YYYYdMMdDD,
+        YYYYdMMdDD_HH_MM_SS
+    }
+
+    private static final String[] parsePatterns = {//
+            YYYYMMDD, //
+            YYYY_MM_DD,//
+            YYYY_MM_DD_HH_MM_SS,    //
+            YYYYsMMsDD,//
+            YYYYsMMsDD_HH_MM_SS,    //
+            YYYYdMMdDD,//
+            YYYYdMMdDD_HH_MM_SS     //
+    };
 
     /**
      * 获取当前Date型日期
-     * 
+     *
      * @return Date() 当前日期
      */
-    public static Date now()
-    {
+    public static Date now() {
         return new Date();
     }
 
+    /**
+     * LocalDateTime
+     *
+     * @return
+     */
+    public static LocalDateTime nowLocal() {
+        return LocalDateTime.now();
+    }
 
-    public static Instant instant()
-    {
+    /**
+     * Instant
+     *
+     * @return Instant
+     */
+    public static Instant instant() {
         return Instant.now();
     }
 
-    /**
-     * 获取当前日期, 默认格式为yyyy-MM-dd
-     * 
-     * @return String
-     */
-    public static String getDate()
-    {
-        return dateTimeNow(YYYY_MM_DD);
-    }
-
-    public static long getTime()
-    {
+    public static long nowTimestamp() {
         return now().getTime();
     }
 
-    public static final String dateTimeNow()
-    {
-        return dateTimeNow(YYYYMMDDHHMMSS);
-    }
-
-    public static final String dateTimeNow(final String format)
-    {
-        return parseDateToStr(format, new Date());
-    }
-
-    public static final String dateTime(final Date date)
-    {
-        return parseDateToStr(YYYY_MM_DD, date);
-    }
-
-    public static final String parseDateToStr(final String format, final Date date)
-    {
-        return new SimpleDateFormat(format).format(date);
-    }
-
-    public static final Date dateTime(final String format, final String ts)
-    {
-        try
-        {
-            return new SimpleDateFormat(format).parse(ts);
-        }
-        catch (ParseException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
     /**
-     * 日期路径 即年/月/日 如20180808
+     * 解析，支持多种格式
      */
-    public static final String dateTime()
-    {
-        Date now = new Date();
-        return DateFormatUtils.format(now, "yyyyMMdd");
+    public static Date parse(String str) {
+        if (str == null) {
+            return null;
+        }
+        try {
+            return parseDate(str, parsePatterns);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
-     * 日期型字符串转化为日期 格式
+     * 解析，特定格式
+     * @param date
+     * @param format
+     * @return
      */
-    public static Date parseDate(Object str)
-    {
-        if (str == null)
-        {
+    public static Date parse(String date, final Format format) {
+        if (date == null)
             return null;
+
+        if (format != null) {
+            try {
+                switch (format) {
+                    case YYYYMMDD:
+                        return parseDate(date, YYYYMMDD);
+                    case YYYY_MM_DD:
+                        return parseDate(date, YYYY_MM_DD);
+                    case YYYY_MM_DD_HH_MM_SS:
+                        return parseDate(date, YYYY_MM_DD_HH_MM_SS);
+                    case YYYYdMMdDD:
+                        return parseDate(date, YYYYdMMdDD);
+                    case YYYYdMMdDD_HH_MM_SS:
+                        return parseDate(date, YYYYdMMdDD_HH_MM_SS);
+                    case YYYYsMMsDD:
+                        return parseDate(date, YYYYsMMsDD);
+                    case YYYYsMMsDD_HH_MM_SS:
+                        return parseDate(date, YYYYsMMsDD_HH_MM_SS);
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
-        try
-        {
-            return parseDate(str.toString(), parsePatterns);
-        }
-        catch (ParseException e)
-        {
-            return null;
-        }
+
+        return parse(date);
     }
-    
+
+
+    /**
+     * 格式化
+     */
+    public static String format(Date date, Format format) {
+        if (date == null)
+            return "";
+
+        if (format != null) {
+            switch (format) {
+                case YYYYMMDD:
+                    return DateFormatUtils.format(date, YYYYMMDD);
+                case YYYY_MM_DD:
+                    return DateFormatUtils.format(date, YYYY_MM_DD);
+                case YYYY_MM_DD_HH_MM_SS:
+                    return DateFormatUtils.format(date, YYYY_MM_DD_HH_MM_SS);
+                case YYYYdMMdDD:
+                    return DateFormatUtils.format(date, YYYYdMMdDD);
+                case YYYYdMMdDD_HH_MM_SS:
+                    return DateFormatUtils.format(date, YYYYdMMdDD_HH_MM_SS);
+                case YYYYsMMsDD:
+                    return DateFormatUtils.format(date, YYYYsMMsDD);
+                case YYYYsMMsDD_HH_MM_SS:
+                    return DateFormatUtils.format(date, YYYYsMMsDD_HH_MM_SS);
+            }
+        }
+
+        return DateFormatUtils.format(date, YYYY_MM_DD_HH_MM_SS);
+    }
+
+
     /**
      * 获取服务器启动时间
      */
-    public static Date getServerStartDate()
-    {
+    public static Date getServerStartDate() {
         long time = ManagementFactory.getRuntimeMXBean().getStartTime();
         return new Date(time);
     }
 
-    /**
-     * 计算两个时间差
-     */
-    public static String getDatePoor(Date endDate, Date nowDate)
-    {
-        long nd = 1000 * 24 * 60 * 60;
-        long nh = 1000 * 60 * 60;
-        long nm = 1000 * 60;
-        // long ns = 1000;
-        // 获得两个时间的毫秒时间差异
-        long diff = endDate.getTime() - nowDate.getTime();
-        // 计算差多少天
-        long day = diff / nd;
-        // 计算差多少小时
-        long hour = diff % nd / nh;
-        // 计算差多少分钟
-        long min = diff % nd % nh / nm;
-        // 计算差多少秒//输出结果
-        // long sec = diff % nd % nh % nm / ns;
-        return day + "天" + hour + "小时" + min + "分钟";
-    }
 }

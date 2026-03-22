@@ -11,7 +11,7 @@
  * /
  */
 
-package org.okstar.platform.common.exception.user;
+package org.okstar.platform.common.exception;
 
 /**
  * 用户密码不正确或不符合规范异常类

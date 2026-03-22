@@ -11,9 +11,7 @@
  * /
  */
 
-package org.okstar.platform.common.exception.user;
-
-import org.okstar.platform.common.exception.OkRuntimeException;
+package org.okstar.platform.common.exception;
 
 /**
  * 用户信息异常类
