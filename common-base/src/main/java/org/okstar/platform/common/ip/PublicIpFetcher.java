@@ -18,9 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 公网IP获取工具类（使用SLF4J日志）
@@ -37,6 +35,9 @@ public class PublicIpFetcher {
 
     // API源配置（按优先级排序）
     private final List<IpDataSource> API_SOURCES = new ArrayList<>();
+
+    // k: source , v: ip
+    private static Map<String, String> CACHED_IP_MAP = new LinkedHashMap<>();
 
 
     private final HttpClient sharedClient;
@@ -97,6 +98,12 @@ public class PublicIpFetcher {
         // 为每个API源创建异步任务
         for (IpDataSource source : API_SOURCES) {
             try {
+                String ip = CACHED_IP_MAP.get(source.getName());
+                if (ip != null) {
+                    log.info("Get cached ip: {}", ip);
+                    return Optional.of(ip);
+                }
+
                 log.info("从数据源:`{}` 获取IP信息", source.getName());
                 var r = source.doGetIp();
                 if (r.isEmpty()) {

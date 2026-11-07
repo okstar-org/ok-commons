@@ -230,7 +230,7 @@
             <dependency>
                 <groupId>io.github.joy1024</groupId>
                 <artifactId>common-bom</artifactId>
-                <version>25.06.01</version>
+                <version>25.06.02-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

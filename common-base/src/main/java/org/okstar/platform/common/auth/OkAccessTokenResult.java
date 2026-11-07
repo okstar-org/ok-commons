@@ -1,7 +1,6 @@
 package org.okstar.platform.common.auth;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 /**
  * 登录返回信息
@@ -16,6 +15,8 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OkAccessTokenResult {
 
     private String username;
@@ -37,6 +38,14 @@ public class OkAccessTokenResult {
     //refresh expires in
     private Long refreshExpiresIn;
 
-    //session
+    /**
+     * session
+     */
     private String session_state;
+
+    /**
+     * 地区、语言
+     */
+    private String locale;
+
 }

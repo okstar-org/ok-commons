@@ -20,7 +20,7 @@
     <packaging>pom</packaging>
     <groupId>io.github.joy1024</groupId>
     <artifactId>common-bom</artifactId>
-    <relativePath>../pom.xml</relativePath>
+    <version>25.06.02-SNAPSHOT</version>
 
     <name>OkStar::common-bom</name>
     <description>OkStar::common-bom</description>
@@ -52,6 +52,33 @@
                             <keyname>${gpg.keyname}</keyname>
                             <passphraseServerId>${gpg.keyname}</passphraseServerId>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- javadoc：packaging=pom 时该插件会跳过（Central 对 pom 也不要求） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

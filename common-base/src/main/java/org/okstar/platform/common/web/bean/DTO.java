@@ -25,7 +25,7 @@ import java.io.Serializable;
 @Getter
 public abstract class DTO implements Serializable {
     //数据ID
-    private long id;
+    private Long id;
     //数据UUID
     private String uuid;
     //数据类型(类名)
