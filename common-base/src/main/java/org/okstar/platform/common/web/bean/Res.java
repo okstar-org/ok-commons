@@ -18,18 +18,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 
 /**
  * 响应信息主体
+ * <p>
+ * 注意：响应包装不是数据传输实体，不能继承 DTO
+ * （DTO 的 id/uuid/clazz 在响应体上没有意义，序列化出来只会是三个 null 字段）。
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class Res<T> extends DTO {
+@EqualsAndHashCode
+public class Res<T> implements Serializable {
 
     private static final int OK = 0;
     private static final int CREATED = 1;

@@ -14,15 +14,17 @@
 package org.okstar.platform.common.core.web.bean;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.okstar.platform.common.date.OkDateUtils;
+
+import java.io.Serializable;
 
 /**
  * 请求实体
+ * <p>
+ * 实现 Serializable。
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Req extends VO {
+public class Req implements Serializable {
     public static Req empty(){
         return new Req();
     }
